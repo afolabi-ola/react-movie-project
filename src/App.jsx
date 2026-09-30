@@ -1,7 +1,11 @@
+import Navbar from './components/layout/Navbar';
+
 function App() {
   return (
-    <div>
-      <h1 className='text-red-500'>Welcome to React Movie Project</h1>
+    <div className='flex flex-col items-center justify-center min-h-screen gap-4'>
+      <header>
+        <Navbar />
+      </header>
     </div>
   );
 }
