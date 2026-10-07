@@ -14,10 +14,10 @@ function Navbar() {
       </div>
 
       <ul className='flex gap-6'>
-        <CustomLink text='Home' loc='#' />
-        <CustomLink text='About' loc='#' />
-        <CustomLink text='FAQs' loc='#' />
-        <CustomLink text='Movies' loc='#' />
+        <CustomLink text='Home' loc='/' />
+        <CustomLink text='About' loc='/about' />
+        <CustomLink text='FAQs' loc='/faqs' />
+        <CustomLink text='Movies' loc='/movies' />
       </ul>
 
       <div className='flex gap-4 items-center'>

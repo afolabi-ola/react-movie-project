@@ -33,7 +33,6 @@ function Carousel() {
       try {
         const response = await fetch(DISCOVER_API_URL, OPTIONS);
 
-        console.log('Response:', response);
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -44,7 +43,7 @@ function Carousel() {
         }
 
         const data = await response.json();
-        console.log('Data:', data);
+
 
         setSliderMovies(data.results.slice(0, 3));
       } catch (error) {

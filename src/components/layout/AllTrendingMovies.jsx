@@ -42,6 +42,7 @@ function AllTrendingMovies() {
             vote_average,
             poster_path,
             id,
+            media_type,
           } = movie;
 
           const imageUrl = `${IMAGE_BASE_URL}${poster_path}`;
@@ -50,10 +51,12 @@ function AllTrendingMovies() {
 
           return (
             <MovieCard
+              id={id}
               title={title || original_title || name || original_name}
               rating={aprxVoteAvg.toFixed(1)}
               image={imageUrl}
               key={id}
+              mediaType={media_type || 'movie'}
             />
           );
         })}

@@ -14,3 +14,8 @@ export const DISCOVER_API_URL =
   'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
 
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+export const getMovieDetailsUrl = (id) =>
+  `https://api.themoviedb.org/3/movie/${id}?language=en-US&append_to_response=credits`;
+
+export const SERIES_API_URL = '';

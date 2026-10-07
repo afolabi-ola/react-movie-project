@@ -1,12 +1,18 @@
+import { NavLink } from 'react-router';
+
 function CustomLink({ text, loc }) {
   return (
     <li>
-      <a
-        href={loc}
-        className='hover:text-red-400 hover:text-lg transition-all ease-in-out duration-500'
+      <NavLink
+        to={loc}
+        className={({ isActive }) =>
+          isActive
+            ? 'text-indigo-500 dark:text-blue-400'
+            : 'hover:text-indigo-400 transition-all ease-in-out duration-500'
+        }
       >
         {text}
-      </a>
+      </NavLink>
     </li>
   );
 }
