@@ -1,9 +1,11 @@
+import { Route, Routes } from 'react-router';
 import Navbar from './components/layout/Navbar';
-import Carousel from './components/layout/Carousel';
-import MovieCard from './components/layout/MovieCard';
-import AllTrendingMovies from './components/layout/AllTrendingMovies';
-
-
+import About from './pages/About';
+import Faqs from './pages/Faqs';
+import Home from './pages/Home';
+import Movies from './pages/Movies';
+import MovieDetails from './pages/MovieDetails';
+import SeriesDetails from './pages/SeriesDetails';
 
 function App() {
   return (
@@ -12,8 +14,14 @@ function App() {
         <Navbar />
       </header>
       <main className='bg-slate-50 dark:bg-slate-950 w-full min-h-lvh h-full text-slate-900 dark:text-slate-100 p-6 space-y-8'>
-        <Carousel />
-        <AllTrendingMovies />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/faqs' element={<Faqs />} />
+          <Route path='/movies' element={<Movies />} />
+          <Route path='/movie-details/:id' element={<MovieDetails />} />
+          <Route path='/series-details/:id' element={<SeriesDetails />} />
+        </Routes>
       </main>
     </>
   );
