@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TRENDING_API_URL, OPTIONS, IMAGE_BASE_URL } from '../../constants';
+import { TRENDING_API_URL, OPTIONS, getImageUrl } from '../../constants';
 import MovieCard from './MovieCard';
 
 function AllTrendingMovies() {
@@ -45,7 +45,7 @@ function AllTrendingMovies() {
             media_type,
           } = movie;
 
-          const imageUrl = `${IMAGE_BASE_URL}${poster_path}`;
+          const imageUrl = getImageUrl(poster_path, 'w500');
 
           const aprxVoteAvg = Math.round(vote_average * 10) / 10; // Round to one decimal place
 
