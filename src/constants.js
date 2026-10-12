@@ -13,9 +13,14 @@ export const OPTIONS = {
 export const DISCOVER_API_URL =
   'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
 
-export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+  
+  export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
+  export const getImageUrl = (path, size = 'w500') =>
+    `${IMAGE_BASE_URL}/${size}/${path}`;
+
+  
 export const getMovieDetailsUrl = (id) =>
-  `https://api.themoviedb.org/3/movie/${id}?language=en-US&append_to_response=credits`;
+  `https://api.themoviedb.org/3/movie/${id}?language=en-US&append_to_response=credits,videos`;
 
 export const SERIES_API_URL = '';

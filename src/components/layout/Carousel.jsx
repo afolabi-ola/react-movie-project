@@ -2,7 +2,7 @@ import Button from '../ui/Button';
 import { useState, useEffect } from 'react';
 import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
 import RatingBadge from '../ui/RatingBadge';
-import { DISCOVER_API_URL, IMAGE_BASE_URL, OPTIONS } from '../../constants';
+import { DISCOVER_API_URL, getImageUrl, OPTIONS } from '../../constants';
 
 function Carousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -59,7 +59,7 @@ function Carousel() {
   return (
     <div className='border border-indigo-500 dark:border-slate-900 overflow-hidden w-full h-[70vh] flex  rounded-2xl relative text-slate-100'>
       {sliderMovies.map((slide) => {
-        const imageUrl = `${IMAGE_BASE_URL}${slide.backdrop_path}`;
+        const imageUrl = getImageUrl(slide.backdrop_path, 'w1280');
         return (
           <div
             key={slide.id}
@@ -107,3 +107,4 @@ function Carousel() {
 }
 
 export default Carousel;
+
