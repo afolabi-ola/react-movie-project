@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
 import RatingBadge from '../ui/RatingBadge';
 import { DISCOVER_API_URL, getImageUrl, OPTIONS } from '../../constants';
+import { Link } from 'react-router';
 
 function Carousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -87,7 +88,9 @@ function Carousel() {
                   voteCount={slide.vote_count}
                 />
 
-                <Button>View Details</Button>
+                <Link to={`/movie-details/${slide.id}`}>
+                  <Button>View Details</Button>
+                </Link>
               </div>
             </div>
           </div>
