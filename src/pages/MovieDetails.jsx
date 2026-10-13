@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { getImageUrl, getMovieDetailsUrl, OPTIONS } from '../constants';
 import BackButton from '../components/ui/BackButton';
 import { HiCalendar, HiClock, HiHeart, HiPlay, HiTicket } from 'react-icons/hi';
 import Badge from '../components/ui/Badge';
 import MetaDataIcon from '../components/ui/MetaDataIcon';
 import RatingBadge from '../components/ui/RatingBadge';
+import Loader from '../components/ui/Loader';
+import ErrorMessage from '../components/ui/ErrorMessage';
 
 
 function MovieDetails() {
   const { id } = useParams();
 
   const [movieDetails, setMovieDetails] = useState();
-
-  console.log(movieDetails);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page when the component mounts
@@ -21,6 +23,7 @@ function MovieDetails() {
 
     const fetchMovieDetails = async () => {
       try {
+        setIsLoading(true);
         const res = await fetch(url, OPTIONS);
 
         if (!res.ok) {
@@ -34,24 +37,56 @@ function MovieDetails() {
         setMovieDetails(data);
       } catch (error) {
         console.log(`Error: Error Fetching Movie Details: ${error}`);
+        setErrorMessage(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMovieDetails();
   }, [id]);
 
-  const trailer = movieDetails?.videos?.results
-    ? movieDetails.videos.results.find(
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (errorMessage) {
+    return <ErrorMessage errorMessage={errorMessage} />;
+  }
+
+  const videos = movieDetails?.videos?.results || [];
+
+  const trailer = videos
+    ? videos.find(
         (video) =>
           video.site === 'YouTube' &&
           video.type === 'Trailer' &&
           video.official,
       ) ||
-      movieDetails.videos.results.find(
+      videos.find(
         (video) => video.site === 'YouTube' && video.type === 'Trailer',
       ) ||
-      movieDetails.videos.results.find((video) => video.site === 'YouTube')
+      videos.find((video) => video.site === 'YouTube')
     : [];
+  
+  const seenKeys = new Set();
+
+  const clips = videos
+    .filter(
+      (video) =>
+        video.site === 'YouTube' &&
+        ['Clip', 'Featurette', 'Teaser', 'Behind the Scenes'].includes(
+          video.type,
+        ),
+    )
+    .filter((video) => {
+      if (seenKeys.has(video.key)) return false;
+      seenKeys.add(video.key);
+      return video.key !== trailer?.key;
+    })
+    .slice(0, 5);
+
+
 
   const {
     backdrop_path,
@@ -65,6 +100,9 @@ function MovieDetails() {
     genres = [],
     homepage,
   } = movieDetails || {};
+
+  const cast = movieDetails?.credits?.cast.slice(0, 10) || [];
+  console.log(cast);
 
   const releaseYear = release_date ? release_date.slice(0, 4) : 'N/A';
 
@@ -179,6 +217,90 @@ function MovieDetails() {
             )}
           </div>
         </section>
+
+        <section>
+          <div className='mb-5'>
+            <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
+              Meet the cast
+            </p>
+            <h2 className='text-3xl font-black'>Top cast</h2>
+          </div>
+
+          {cast.length > 0 ? (
+            <div className='flex snap-x gap-4 overflow-x-auto pb-4 '>
+              {cast.map((person) => (
+                <Link
+                  key={person.credit_id || person.id}
+                  to={`/cast/${person.id}`}
+                  className='group w-36 shrink-0 snap-start sm:w-40'
+                >
+                  {person.profile_path ? (
+                    <img
+                      src={getImageUrl(person.profile_path, 'w500')}
+                      alt={person.name}
+                      className='aspect-3/4 w-full rounded-2xl object-cover shadow-md transition duration-300 group-hover:-translate-y-1 group-hover:shadow-xl'
+                    />
+                  ) : (
+                    <div className='flex aspect-3/4 items-center justify-center rounded-2xl bg-slate-200 text-center text-xs text-slate-500 dark:bg-slate-800 dark:text-slate-400'>
+                      No photo
+                    </div>
+                  )}
+                  <h3 className='mt-3 truncate font-bold'>
+                    {person.name || person.original_name}
+                  </h3>
+                  <p className='truncate text-sm text-slate-500 dark:text-slate-400'>
+                    {person.character || 'Cast member'}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className='text-slate-500 dark:text-slate-400'>
+              Cast information is not available yet.
+            </p>
+          )}
+        </section>
+
+        {clips.length > 0 && (
+          <section>
+            <div className='mb-5'>
+              <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
+                More to watch
+              </p>
+              <h2 className='text-3xl font-black'>Clips & featurettes</h2>
+            </div>
+            <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+              {clips.map((video) => (
+                <a
+                  key={video.key}
+                  href={`https://www.youtube.com/watch?v=${video.key}`}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='group overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900'
+                >
+                  <div className='relative aspect-video overflow-hidden bg-slate-200 dark:bg-slate-800'>
+                    <img
+                      src={`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`}
+                      alt=''
+                      className='h-full w-full object-cover transition duration-300 group-hover:scale-105'
+                    />
+                    <span className='absolute inset-0 flex items-center justify-center bg-slate-950/30'>
+                      <span className='rounded-full bg-white p-3 text-indigo-500 shadow-lg'>
+                        <HiPlay />
+                      </span>
+                    </span>
+                  </div>
+                  <div className='p-4'>
+                    <p className='mb-1 text-xs font-bold uppercase tracking-wider text-indigo-500 dark:text-blue-400'>
+                      {video.type}
+                    </p>
+                    <h3 className='line-clamp-2 font-bold'>{video.name}</h3>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     );
 }

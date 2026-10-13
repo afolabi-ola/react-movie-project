@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import ImageOne from '../../assets/images/img3.jpg';
 import Button from '../ui/Button';
 import RatingBadge from '../ui/RatingBadge';
+import Badge from '../ui/Badge';
 
 function MovieCard({
   image = ImageOne,
@@ -10,7 +11,7 @@ function MovieCard({
   id,
   mediaType = 'movie',
 }) {
-  console.log(mediaType);
+
   return (
     <div className='w-62.5 min-h-125 h-full  overflow-hidden space-y-4 shadow-2xl bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-tr-2xl rounded-b-2xl'>
       <div className='w-full max-h-80 h-[70%]'>
@@ -18,8 +19,9 @@ function MovieCard({
       </div>
 
       <div className='px-2 space-x-0.5 space-y-4'>
-        <div>
+        <div className='flex gap-2 capitalize'>
           <RatingBadge rating={rating} />
+          <Badge text={mediaType === 'tv' ? 'series' : mediaType} />
         </div>
         <h1 className='font-bold'>{title}</h1>
         <Link
