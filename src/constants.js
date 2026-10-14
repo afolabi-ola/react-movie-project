@@ -23,4 +23,5 @@ export const DISCOVER_API_URL =
 export const getMovieDetailsUrl = (id) =>
   `https://api.themoviedb.org/3/movie/${id}?language=en-US&append_to_response=credits,videos`;
 
-export const SERIES_API_URL = '';
+export const getSeriesDetailsUrl = (id) =>
+  `https://api.themoviedb.org/3/tv/${id}?language=en-US&append_to_response=videos,credits,images,recommendations,similar,content_ratings`;
