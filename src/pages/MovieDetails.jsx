@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { getImageUrl, getMovieDetailsUrl, OPTIONS } from '../constants';
 import BackButton from '../components/ui/BackButton';
-import { HiCalendar, HiClock, HiHeart, HiPlay, HiTicket } from 'react-icons/hi';
-import Badge from '../components/ui/Badge';
-import MetaDataIcon from '../components/ui/MetaDataIcon';
-import RatingBadge from '../components/ui/RatingBadge';
+import { HiPlay } from 'react-icons/hi';
 import Loader from '../components/ui/Loader';
 import ErrorMessage from '../components/ui/ErrorMessage';
+import DetailsHero from '../components/layout/DetailsHero';
 
 
 function MovieDetails() {
@@ -114,71 +112,20 @@ function MovieDetails() {
       <div className='mx-auto max-w-7xl space-y-12 pb-12'>
         <BackButton />
 
-        <section className='relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-xl dark:border-slate-800 dark:bg-slate-900 h-full'>
-          {backdrop_path && (
-            <img
-              src={getImageUrl(backdrop_path, 'w1280')}
-              alt=''
-              className='absolute inset-0 h-full w-full object-cover opacity-10 dark:opacity-20'
-            />
-          )}
-
-          <div className='relative grid gap-8 p-5 sm:p-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-10 lg:p-10'>
-            <div className='mx-auto w-full max-w-65'>
-              {poster_path ? (
-                <img
-                  src={getImageUrl(poster_path, 'w500')}
-                  alt={`${title} poster`}
-                  className='aspect-2/3 w-full rounded-2xl object-cover shadow-2xl'
-                />
-              ) : (
-                <div className='flex aspect-2/3 items-center justify-center rounded-2xl bg-slate-200 text-center text-slate-500 dark:bg-slate-800 dark:text-slate-400'>
-                  No poster available
-                </div>
-              )}
-
-              <button className='mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 py-3 font-semibold transition hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-blue-400 dark:hover:text-blue-400'>
-                <HiHeart />
-                Add to watchlist
-              </button>
-            </div>
-
-            <div className='min-w-0'>
-              <div className='mb-5 flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400'>
-                <Badge text={'Movie'} variant='primary' />
-                <MetaDataIcon icon={HiCalendar} text={releaseYear} />
-                <MetaDataIcon icon={HiClock} text={formattedRuntime} />
-              </div>
-
-              <h1 className='max-w-3xl text-4xl font-black tracking-tight text-slate-900 sm:text-6xl dark:text-white'>
-                {title}
-              </h1>
-
-              <div className='mt-5 flex flex-wrap items-center gap-4'>
-                <RatingBadge rating={vote_average} vote_count={vote_count} />
-                {genres.map((genre) => (
-                  <Badge key={genre.id} text={genre.name} />
-                ))}
-              </div>
-
-              <p className='mt-7 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300'>
-                {overview || 'No overview is available for this movie yet.'}
-              </p>
-
-              {homepage && (
-                <a
-                  href={homepage}
-                  target='_blank'
-                  rel='noreferrer'
-                  className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 font-bold text-white transition hover:bg-indigo-600 dark:bg-blue-500 dark:hover:bg-blue-600'
-                >
-                  <HiTicket />
-                  Official website
-                </a>
-              )}
-            </div>
-          </div>
-        </section>
+        <DetailsHero
+          details={{
+            backdrop_path,
+            title,
+            overview,
+            releaseYear: releaseYear,
+            vote_average,
+            vote_count,
+            poster_path,
+            formattedRuntime: formattedRuntime,
+            genres,
+            homepage,
+          }}
+        />
 
         <section>
           <div className='mb-5 flex items-end justify-between gap-4'>
