@@ -12,6 +12,9 @@ import ErrorMessage from '../components/ui/ErrorMessage';
 import DetailsHero from '../components/layout/DetailsHero';
 import { formatDate, getYearRange } from '../utils';
 import InfoItem from '../components/ui/InfoItem';
+import { HiClock, HiStar } from 'react-icons/hi';
+import RatingBadge from '../components/ui/RatingBadge';
+import { HiTv } from 'react-icons/hi2';
 
 function SeriesDetails() {
   const { id } = useParams();
@@ -102,11 +105,12 @@ function SeriesDetails() {
     number_of_seasons: numberOfSeasons,
     type,
     production_countries: productionCountries = [],
+    production_companies: productionCompanies = [],
     spoken_languages: spokenLanguages = [],
     usRating,
     created_by: creators = [],
     networks = [],
-
+    seasons = [],
     origin_country: originCountries = [],
   } = seriesDetails;
 
@@ -117,6 +121,8 @@ function SeriesDetails() {
   const countries = countryNames.length
     ? countryNames.join(', ')
     : originCountries.join(', ');
+
+  const airedSeasons = seasons.filter((season) => season.season_number > 0);
 
   return (
     <div className='mx-auto max-w-7xl space-y-12 pb-12'>
@@ -215,6 +221,86 @@ function SeriesDetails() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section>
+        <div className='mb-5'>
+          <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
+            Season guide
+          </p>
+          <h2 className='text-3xl font-black'>Every season</h2>
+        </div>
+        <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+          {airedSeasons.map((season) => (
+            <article
+              key={season.id}
+              className='overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900'
+            >
+              {season.poster_path ? (
+                <img
+                  src={getImageUrl(season.poster_path)}
+                  alt={`${season.name} poster`}
+                  className='aspect-2/3 w-full object-cover sm:aspect-video'
+                />
+              ) : (
+                <div className='flex aspect-video items-center justify-center bg-slate-200 text-slate-500 dark:bg-slate-800'>
+                  No season artwork
+                </div>
+              )}
+              <div className='p-5'>
+                <div className='flex items-start justify-between gap-3'>
+                  <h3 className='text-xl font-black'>{season.name}</h3>
+                  <RatingBadge rating={season.vote_average} />
+                </div>
+                <p className='mt-2 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400'>
+                  <HiClock />
+                  {season.episode_count} episodes ·{' '}
+                  {formatDate(season.air_date)}
+                </p>
+                {season.overview && (
+                  <p className='mt-3 line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300'>
+                    {season.overview}
+                  </p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className='mb-5'>
+          <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
+            Production companies
+          </p>
+          <h2 className='text-3xl font-black'>Who makes it</h2>
+        </div>
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+          {productionCompanies.map((company) => (
+            <div
+              key={company.id}
+              className='flex min-h-28 min-w-0 flex-col items-start gap-3 rounded-2xl border border-slate-200 bg-slate-100 p-5 dark:border-slate-800 dark:bg-slate-900'
+            >
+              {company.logo_path ? (
+                <img
+                  src={getImageUrl(company.logo_path, 'w92')}
+                  alt=''
+                  className='h-12 w-20 shrink-0 object-contain'
+                />
+              ) : (
+                <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-blue-300'>
+                  <HiTv />
+                </div>
+              )}
+              <div className='min-w-0 w-full'>
+                <h3 className='wrap-break-word font-bold'>{company.name}</h3>
+                <p className='mt-1 text-sm text-slate-500 dark:text-slate-400'>
+                  {company.origin_country || 'International'}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>
