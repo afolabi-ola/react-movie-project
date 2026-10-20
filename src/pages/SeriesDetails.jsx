@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import BackButton from '../components/ui/BackButton';
-import {
-  getImageUrl,
-  getSeriesDetailsUrl,
-  IMAGE_BASE_URL,
-  OPTIONS,
-} from '../constants';
+import { getImageUrl, getSeriesDetailsUrl, OPTIONS } from '../constants';
 import { useParams } from 'react-router';
 import Loader from '../components/ui/Loader';
 import ErrorMessage from '../components/ui/ErrorMessage';
 import DetailsHero from '../components/layout/DetailsHero';
 import { formatDate, getYearRange } from '../utils';
 import InfoItem from '../components/ui/InfoItem';
-import { HiClock, HiStar } from 'react-icons/hi';
+import { HiClock } from 'react-icons/hi';
 import RatingBadge from '../components/ui/RatingBadge';
 import { HiTv } from 'react-icons/hi2';
+import HeadingText from '../components/ui/HeadingText';
+import Trailer from '../components/layout/Trailer';
+import Cast from '../components/layout/Cast';
+import Gallery from '../components/layout/Gallery';
+import Clips from '../components/layout/Clips';
+import RelatedSeries from '../components/layout/RelatedSeries';
 
 function SeriesDetails() {
   const { id } = useParams();
@@ -22,7 +23,11 @@ function SeriesDetails() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [seriesDetails, setSeriesDetails] = useState(null);
 
+
+
   useEffect(() => {
+    window.scroll(0, 0);
+
     const fetchSeriesDetails = async () => {
       setIsLoading(true);
       setErrorMessage('');
@@ -112,6 +117,7 @@ function SeriesDetails() {
     networks = [],
     seasons = [],
     origin_country: originCountries = [],
+    recommendations = [],
   } = seriesDetails;
 
   const language = spokenLanguages[0]?.english_name || 'English';
@@ -123,6 +129,14 @@ function SeriesDetails() {
     : originCountries.join(', ');
 
   const airedSeasons = seasons.filter((season) => season.season_number > 0);
+
+  const cast = seriesDetails?.credits.cast.slice(0, 10) || [];
+
+  const gallery = (seriesDetails?.images?.backdrops || []).slice(0, 6);
+
+  const relatedSeries = (recommendations?.results || [])
+    .filter((series) => series.media_type === 'tv' || !series.media_type)
+    .slice(0, 6);
 
   return (
     <div className='mx-auto max-w-7xl space-y-12 pb-12'>
@@ -147,12 +161,10 @@ function SeriesDetails() {
 
       <section className='grid gap-8 '>
         <div>
-          <div className='mb-5'>
-            <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
-              Production notes
-            </p>
-            <h2 className='text-3xl font-black'>The series at a glance</h2>
-          </div>
+          <HeadingText
+            heading={'Production notes'}
+            subHeading={'The series at a glance'}
+          />
           <dl className='grid gap-x-8 gap-y-6 rounded-2xl border border-slate-200 bg-slate-100 p-6 sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900'>
             <InfoItem
               label='Production years'
@@ -169,12 +181,10 @@ function SeriesDetails() {
         </div>
 
         <div>
-          <div className='mb-5'>
-            <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
-              Behind the show
-            </p>
-            <h2 className='text-3xl font-black'>Creators & networks</h2>
-          </div>
+          <HeadingText
+            heading={'Behind the show'}
+            subHeading={'Creators & networks'}
+          />
           <div className='space-y-5 rounded-2xl border border-slate-200 bg-slate-100 p-6 dark:border-slate-800 dark:bg-slate-900'>
             <div>
               <p className='mb-3 text-sm font-bold text-slate-500 dark:text-slate-400'>
@@ -225,12 +235,7 @@ function SeriesDetails() {
       </section>
 
       <section>
-        <div className='mb-5'>
-          <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
-            Season guide
-          </p>
-          <h2 className='text-3xl font-black'>Every season</h2>
-        </div>
+        <HeadingText heading={'Season guide'} subHeading={'Every season'} />
         <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
           {airedSeasons.map((season) => (
             <article
@@ -270,12 +275,10 @@ function SeriesDetails() {
       </section>
 
       <section>
-        <div className='mb-5'>
-          <p className='mb-1 text-sm font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-blue-400'>
-            Production companies
-          </p>
-          <h2 className='text-3xl font-black'>Who makes it</h2>
-        </div>
+        <HeadingText
+          heading={'Production companies'}
+          subHeading={'Who makes it'}
+        />
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
           {productionCompanies.map((company) => (
             <div
@@ -303,6 +306,18 @@ function SeriesDetails() {
           ))}
         </div>
       </section>
+
+      <Trailer trailer={trailer} title={title || name} />
+
+      <Cast cast={cast} />
+
+      {gallery.length > 0 && <Gallery gallery={gallery} />}
+
+      {clips.length > 0 && <Clips clips={clips} />}
+
+      {relatedSeries.length > 0 && (
+        <RelatedSeries relatedSeries={relatedSeries} />
+      )}
     </div>
   );
 }
