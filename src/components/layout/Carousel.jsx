@@ -2,12 +2,11 @@ import Button from '../ui/Button';
 import { useState, useEffect } from 'react';
 import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
 import RatingBadge from '../ui/RatingBadge';
-import { DISCOVER_API_URL, getImageUrl, OPTIONS } from '../../constants';
+import { getImageUrl } from '../../constants';
 import { Link } from 'react-router';
 
-function Carousel() {
+function Carousel({ sliderMovies }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [sliderMovies, setSliderMovies] = useState([]);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prev) =>
@@ -28,34 +27,6 @@ function Carousel() {
 
     return () => clearInterval(intervalId);
   }, [currentSlide]);
-
-  useEffect(() => {
-    const fetchSliderMovies = async () => {
-      try {
-        const response = await fetch(DISCOVER_API_URL, OPTIONS);
-
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error fetching slider movies:', errorData);
-          throw new Error(
-            `HTTP error! status: ${response.status}, message: ${errorData.status_message}`,
-          );
-        }
-
-        const data = await response.json();
-
-
-        setSliderMovies(data.results.slice(0, 3));
-      } catch (error) {
-        console.error('Error fetching slider movies:', error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-
-    fetchSliderMovies();
-  }, []);
 
   return (
     <div className='border border-indigo-500 dark:border-slate-900 overflow-hidden w-full h-[70vh] flex  rounded-2xl relative text-slate-100'>

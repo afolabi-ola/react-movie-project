@@ -1,33 +1,7 @@
-import { useState, useEffect } from 'react';
-import { TRENDING_API_URL, OPTIONS, getImageUrl } from '../../constants';
+import { getImageUrl } from '../../constants';
 import MovieCard from './MovieCard';
 
-function AllTrendingMovies() {
-  const [trendingMovies, setTrendingMovies] = useState([]);
-
-  useEffect(() => {
-    const fetchTrendingMovies = async () => {
-      try {
-        const response = await fetch(TRENDING_API_URL, OPTIONS);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error fetching trending movies:', errorData);
-          throw new Error(
-            `HTTP error! status: ${response.status}, message: ${errorData.status_message}`,
-          );
-        }
-
-        const data = await response.json();
-        setTrendingMovies(data.results);
-      } catch (error) {
-        console.error('Error fetching trending movies:', error);
-      }
-    };
-
-    fetchTrendingMovies();
-  }, []);
-
+function AllTrendingMovies({ trendingMovies }) {
   return (
     <div className=''>
       <h1 className='text-2xl font-bold mb-4'>Trending Movies</h1>
