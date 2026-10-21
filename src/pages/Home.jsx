@@ -34,9 +34,9 @@ function Home() {
           return data.results;
         });
 
-        console.log(dataPromises);
+        
         const [sliders, trending] = await Promise.all(dataPromises);
-        console.log(sliders, trending);
+       
 
         setSliderMovies(sliders.slice(0, 3));
         setTrendingMovies(trending);
