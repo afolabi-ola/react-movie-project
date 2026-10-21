@@ -1,13 +1,21 @@
 import { IoIosMoon, IoIosSunny } from 'react-icons/io';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   const handleToggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    localStorage.setItem('theme', theme === 'light' ? 'dark' : 'light');
   };
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   return (
     <div>
