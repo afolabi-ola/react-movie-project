@@ -9,8 +9,10 @@ import Logo from '../ui/Logo';
 import Modal from '../ui/Modal';
 import ThemeToggle from '../ui/ThemeToggle';
 import { FiSearch } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
 
 function Navbar() {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -20,6 +22,9 @@ function Navbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Handle search submission logic here
+    navigate(`/search?userSearch=${query}`);
   };
 
   return (
