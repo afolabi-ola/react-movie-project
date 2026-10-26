@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Movies from './pages/Movies';
 import MovieDetails from './pages/MovieDetails';
 import SeriesDetails from './pages/SeriesDetails';
+import Search from './pages/Search';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path='/movies' element={<Movies />} />
           <Route path='/movie-details/:id' element={<MovieDetails />} />
           <Route path='/series-details/:id' element={<SeriesDetails />} />
+          <Route path='search' element={<Search />} />
         </Routes>
       </main>
     </>

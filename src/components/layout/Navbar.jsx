@@ -9,12 +9,22 @@ import Logo from '../ui/Logo';
 import Modal from '../ui/Modal';
 import ThemeToggle from '../ui/ThemeToggle';
 import { FiSearch } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
 
 function Navbar() {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
 
   const handleCloseSearch = () => {
     setIsSearchOpen(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Handle search submission logic here
+    navigate(`/search?userSearch=${query}`);
   };
 
   return (
@@ -42,13 +52,15 @@ function Navbar() {
       </div>
 
       <Modal isOpen={isSearchOpen} title='Search' onClose={handleCloseSearch}>
-        <form className='flex items-center gap-2'>
+        <form className='flex items-center gap-2' onSubmit={handleSubmit}>
           <input
             type='search'
             placeholder='Search movies, series, or people'
             aria-label='Search movies, series, or people'
             autoFocus
             className='min-w-0 flex-1 rounded-xl bg-slate-200 px-4 py-3 outline-none placeholder:text-slate-500 dark:bg-slate-800 dark:placeholder:text-slate-400'
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button
             type='submit'
