@@ -6,10 +6,11 @@ function SearchResult({ result }) {
   const title = getResultTitle(result);
   const date = getResultDate(result);
   const isPerson = result.media_type === 'person';
-  const detailsPath =
-    result.media_type === 'movie'
-      ? `/movie-details/${result.id}`
-      : `/series-details/${result.id}`;
+   const detailsPath = isPerson
+     ? `/cast/${result.id}`
+     : result.media_type === 'movie'
+       ? `/movie-details/${result.id}`
+       : `/series-details/${result.id}`;
 
   return (
     <article className='flex gap-4 rounded-2xl bg-slate-100 p-3 shadow-md dark:bg-slate-900'>
@@ -49,14 +50,13 @@ function SearchResult({ result }) {
         <p className='line-clamp-2 text-sm text-slate-600 dark:text-slate-300'>
           {result.overview || 'No description is available for this result.'}
         </p>
-        {!isPerson && (
-          <Link
-            to={detailsPath}
-            className='inline-block text-sm font-semibold text-indigo-500 hover:text-indigo-400'
-          >
-            View details
-          </Link>
-        )}
+
+        <Link
+          to={detailsPath}
+          className='inline-block text-sm font-semibold text-indigo-500 hover:text-indigo-400'
+        >
+          View details
+        </Link>
       </div>
     </article>
   );
