@@ -7,6 +7,8 @@ import Movies from './pages/Movies';
 import MovieDetails from './pages/MovieDetails';
 import SeriesDetails from './pages/SeriesDetails';
 import Search from './pages/Search';
+import Cast from './pages/Cast';
+import NotFound from './pages/NotFound';
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route path='/movie-details/:id' element={<MovieDetails />} />
           <Route path='/series-details/:id' element={<SeriesDetails />} />
           <Route path='search' element={<Search />} />
+          <Route path='cast/:id' element={<Cast />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </main>
     </>

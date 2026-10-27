@@ -26,3 +26,6 @@ export const getSeriesDetailsUrl = (id) =>
 
 export const getMultiSearchUrl = (query) =>
   `https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(query)}`;
+
+export const getPersonDetailsUrl = (id) =>
+  `https://api.themoviedb.org/3/person/${id}?language=en-US&append_to_response=combined_credits`;

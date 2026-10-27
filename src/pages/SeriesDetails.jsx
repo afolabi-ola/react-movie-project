@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import BackButton from '../components/ui/BackButton';
 import { getImageUrl, getSeriesDetailsUrl, OPTIONS } from '../constants';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Loader from '../components/ui/Loader';
 import ErrorMessage from '../components/ui/ErrorMessage';
 import DetailsHero from '../components/layout/DetailsHero';
@@ -22,6 +22,7 @@ function SeriesDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [seriesDetails, setSeriesDetails] = useState(null);
+const navigate = useNavigate();
 
 
 
@@ -140,7 +141,7 @@ function SeriesDetails() {
 
   return (
     <div className='mx-auto max-w-7xl space-y-12 pb-12'>
-      <BackButton placeholder='Back to home' />
+      <BackButton placeholder='Back' navigate={navigate} />
 
       <DetailsHero
         details={{

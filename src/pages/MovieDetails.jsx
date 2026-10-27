@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { getMovieDetailsUrl, OPTIONS } from '../constants';
 import BackButton from '../components/ui/BackButton';
 import Loader from '../components/ui/Loader';
@@ -12,6 +12,7 @@ import Clips from '../components/layout/Clips';
 
 function MovieDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [movieDetails, setMovieDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -112,7 +113,7 @@ function MovieDetails() {
 
     return (
       <div className='mx-auto max-w-7xl space-y-12 pb-12'>
-        <BackButton />
+        <BackButton placeholder='Back' navigate={navigate} />
 
         <DetailsHero
           details={{
