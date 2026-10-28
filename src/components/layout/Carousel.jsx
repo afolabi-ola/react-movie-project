@@ -29,7 +29,7 @@ function Carousel({ sliderMovies }) {
   }, [currentSlide]);
 
   return (
-    <div className='border border-indigo-500 dark:border-slate-900 overflow-hidden w-full h-[70vh] flex  rounded-2xl relative text-slate-100'>
+    <div className='border border-indigo-500 dark:border-slate-900 overflow-hidden w-full sm:h-[70vh] flex  rounded-2xl relative text-slate-100 min-h-112 h-[62vh]'>
       {sliderMovies.map((slide) => {
         const imageUrl = getImageUrl(slide.backdrop_path, 'w1280');
         return (
@@ -41,10 +41,12 @@ function Carousel({ sliderMovies }) {
               transform: `translateX(-${currentSlide * 100}%)`,
             }}
           >
-            <div className='p-8 space-y-2 w-full flex justify-between items-end '>
-              <div className='space-y-2 bg-[rgba(0,0,0,0.5)] rounded-xl p-2'>
-                <h1 className='text-6xl'>{slide.title}</h1>
-                <p className='text-2xl'>{slide.overview.slice(0, 50)}...</p>
+            <div className='sm:p-8 p-3 space-y-2 w-full flex justify-between items-end '>
+              <div className='max-w-3xl space-y-2 bg-[rgba(0,0,0,0.5)] rounded-xl p-2 sm:p-5'>
+                <h1 className='text-3xl sm:text-6xl'>{slide.title}</h1>
+                <p className='text-base sm:text-2xl'>
+                  {slide.overview.slice(0, 50)}...
+                </p>
 
                 {/* <div className='flex gap-2'>
                   <div className='flex'>
@@ -68,11 +70,17 @@ function Carousel({ sliderMovies }) {
         );
       })}
 
-      <div className='absolute bottom-0 right-0'>
-        <button className='text-5xl cursor-pointer' onClick={handlePrevSlide}>
+      <div className='absolute bottom-2 right-2 sm:bottom-0 sm:right-0'>
+        <button
+          className='text-3xl sm:text-5xl cursor-pointer'
+          onClick={handlePrevSlide}
+        >
           <RxCaretLeft />
         </button>
-        <button className='text-5xl cursor-pointer' onClick={handleNextSlide}>
+        <button
+          className='text-3xl sm:text-5xl cursor-pointer'
+          onClick={handleNextSlide}
+        >
           <RxCaretRight />
         </button>
       </div>

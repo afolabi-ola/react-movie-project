@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import LogoImage from '../../assets/images/logo.jpg';
+import LogoImage from '../../assets/images/Movie Explorer Compass Reel Logo.png';
 
 function Logo() {
   return (
