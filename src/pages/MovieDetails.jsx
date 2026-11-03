@@ -10,9 +10,11 @@ import Cast from '../components/layout/Cast';
 import Clips from '../components/layout/Clips';
 
 
-function MovieDetails() {
+function MovieDetails({ addToWatchList, isMovieInWatchList }) {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const isAdded = isMovieInWatchList(+id);
 
   const [movieDetails, setMovieDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +71,7 @@ function MovieDetails() {
       ) ||
       videos.find((video) => video.site === 'YouTube')
     : [];
-  
+
   const seenKeys = new Set();
 
   const clips = videos
@@ -87,8 +89,6 @@ function MovieDetails() {
     })
     .slice(0, 5);
 
-
-
   const {
     backdrop_path,
     title,
@@ -104,39 +104,41 @@ function MovieDetails() {
 
   const cast = movieDetails?.credits?.cast.slice(0, 10) || [];
 
-
   const releaseYear = release_date ? release_date.slice(0, 4) : 'N/A';
 
   const formattedRuntime = runtime
     ? `${Math.floor(runtime / 60)}h ${runtime % 60}m`
     : 'Runtime unavailable';
 
-    return (
-      <div className='mx-auto max-w-7xl space-y-12 pb-12'>
-        <BackButton placeholder='Back' navigate={navigate} />
+  return (
+    <div className='mx-auto max-w-7xl space-y-12 pb-12'>
+      <BackButton placeholder='Back' navigate={navigate} />
 
-        <DetailsHero
-          details={{
-            backdrop_path,
-            title,
-            overview,
-            releaseYear: releaseYear,
-            vote_average,
-            vote_count,
-            poster_path,
-            formattedRuntime: formattedRuntime,
-            genres,
-            homepage,
-          }}
-        />
+      <DetailsHero
+        details={{
+          backdrop_path,
+          title,
+          overview,
+          releaseYear: releaseYear,
+          vote_average,
+          vote_count,
+          poster_path,
+          formattedRuntime: formattedRuntime,
+          genres,
+          homepage,
+          id: +id,
+        }}
+        addToWatchList={addToWatchList}
+        isAdded={isAdded}
+      />
 
-        <Trailer trailer={trailer} title={title} />
+      <Trailer trailer={trailer} title={title} />
 
-        <Cast cast={cast} />
+      <Cast cast={cast} />
 
-        {clips.length > 0 && <Clips clips={clips} />}
-      </div>
-    );
+      {clips.length > 0 && <Clips clips={clips} />}
+    </div>
+  );
 }
 
 export default MovieDetails;
