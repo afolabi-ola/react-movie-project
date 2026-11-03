@@ -1,11 +1,12 @@
-import { HiCalendar, HiClock, HiHeart, HiTicket } from 'react-icons/hi';
+import { HiCalendar, HiClock, HiTicket } from 'react-icons/hi';
 import { getImageUrl } from '../../constants';
 import Badge from '../ui/Badge';
 import MetaDataIcon from '../ui/MetaDataIcon';
 import { HiTv } from 'react-icons/hi2';
 import RatingBadge from '../ui/RatingBadge';
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 
-function DetailsHero({ details }) {
+function DetailsHero({ details, addToWatchList, isAdded }) {
   const {
     backdrop_path,
     poster_path,
@@ -45,9 +46,12 @@ function DetailsHero({ details }) {
             </div>
           )}
 
-          <button className='mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 py-3 font-semibold transition hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-blue-400 dark:hover:text-blue-400'>
-            <HiHeart />
-            Add to watchlist
+          <button
+            className='mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 py-3 font-semibold transition hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-blue-400 dark:hover:text-blue-400'
+            onClick={() => addToWatchList(details)}
+          >
+            {isAdded ? <FaBookmark /> : <FaRegBookmark />}
+            {isAdded ? 'Remove from watchlist' : 'Add to watchlist'}
           </button>
         </div>
 

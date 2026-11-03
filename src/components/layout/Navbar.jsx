@@ -11,14 +11,14 @@ import ThemeToggle from '../ui/ThemeToggle';
 import { FiMenu, FiSearch, FiX } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 
-function Navbar() {
+function Navbar({ watchListCount }) {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleCloseSearch = () => {
-    setIsSearchOpen(false); 
+    setIsSearchOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -43,6 +43,7 @@ function Navbar() {
         <CustomLink text='About' loc='/about' />
         <CustomLink text='FAQs' loc='/faqs' />
         <CustomLink text='Movies' loc='/movies' />
+        <CustomLink text={`Watchlist(${watchListCount})`} loc='/watchlist' />
       </ul>
 
       {/* className='md:hidden rounded-xl p-2 hover:bg-slate-200 dark:hover:bg-slate-800' */}
@@ -95,3 +96,18 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
+
+// [{
+//   img:'ldkd',
+//   title:'ldkdk',
+//   rating:5.8,
+//   id:1,
+//   mediaType:'movie'
+// },
+//   {
+
+//   }
+
+// ]

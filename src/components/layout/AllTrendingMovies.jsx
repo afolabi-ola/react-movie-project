@@ -1,7 +1,11 @@
 import { getImageUrl } from '../../constants';
 import MovieCard from './MovieCard';
 
-function AllTrendingMovies({ trendingMovies }) {
+function AllTrendingMovies({
+  trendingMovies,
+  addToWatchList,
+  isMovieInWatchList,
+}) {
   return (
     <div className=''>
       <h1 className='text-2xl font-bold mb-4'>Trending</h1>
@@ -31,6 +35,9 @@ function AllTrendingMovies({ trendingMovies }) {
               image={imageUrl}
               key={id}
               mediaType={media_type || 'movie'}
+              movie={movie}
+              addToWatchList={addToWatchList}
+              isMovieInWatchList={isMovieInWatchList}
             />
           );
         })}
