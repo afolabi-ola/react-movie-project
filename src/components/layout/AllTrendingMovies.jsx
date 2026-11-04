@@ -3,8 +3,7 @@ import MovieCard from './MovieCard';
 
 function AllTrendingMovies({
   trendingMovies,
-  addToWatchList,
-  isMovieInWatchList,
+
 }) {
   return (
     <div className=''>
@@ -36,8 +35,6 @@ function AllTrendingMovies({
               key={id}
               mediaType={media_type || 'movie'}
               movie={movie}
-              addToWatchList={addToWatchList}
-              isMovieInWatchList={isMovieInWatchList}
             />
           );
         })}

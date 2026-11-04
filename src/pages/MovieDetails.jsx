@@ -10,11 +10,9 @@ import Cast from '../components/layout/Cast';
 import Clips from '../components/layout/Clips';
 
 
-function MovieDetails({ addToWatchList, isMovieInWatchList }) {
+function MovieDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const isAdded = isMovieInWatchList(+id);
 
   const [movieDetails, setMovieDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -128,8 +126,6 @@ function MovieDetails({ addToWatchList, isMovieInWatchList }) {
           homepage,
           id: +id,
         }}
-        addToWatchList={addToWatchList}
-        isAdded={isAdded}
       />
 
       <Trailer trailer={trailer} title={title} />

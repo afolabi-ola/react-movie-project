@@ -5,8 +5,10 @@ import MetaDataIcon from '../ui/MetaDataIcon';
 import { HiTv } from 'react-icons/hi2';
 import RatingBadge from '../ui/RatingBadge';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
+import useWatchList from '../../hooks/useWatchList';
 
-function DetailsHero({ details, addToWatchList, isAdded }) {
+function DetailsHero({ details = {} }) {
+  const { addToWatchList, isMovieInWatchList } = useWatchList();
   const {
     backdrop_path,
     poster_path,
@@ -20,7 +22,10 @@ function DetailsHero({ details, addToWatchList, isAdded }) {
     homepage,
     mediaType = 'Movie',
     tagline,
+    id,
   } = details;
+
+  const isAdded = isMovieInWatchList(id);
 
   return (
     <section className='relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-xl dark:border-slate-800 dark:bg-slate-900 h-full'>
