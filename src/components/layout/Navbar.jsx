@@ -1,7 +1,3 @@
-// import Logo from './../../assets/images/logo.jpg';
-
-
-// import ThemeToggle from '../theme/ThemeToggle';
 import { useState } from 'react';
 import Button from '../ui/Button';
 import CustomLink from '../ui/CustomLink';
@@ -10,8 +6,10 @@ import Modal from '../ui/Modal';
 import ThemeToggle from '../ui/ThemeToggle';
 import { FiMenu, FiSearch, FiX } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
+import useWatchList from '../../hooks/useWatchList';
 
-function Navbar({ watchListCount }) {
+function Navbar() {
+  const { watchListData } = useWatchList();
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -43,7 +41,10 @@ function Navbar({ watchListCount }) {
         <CustomLink text='About' loc='/about' />
         <CustomLink text='FAQs' loc='/faqs' />
         <CustomLink text='Movies' loc='/movies' />
-        <CustomLink text={`Watchlist(${watchListCount})`} loc='/watchlist' />
+        <CustomLink
+          text={`Watchlist(${watchListData.length})`}
+          loc='/watchlist'
+        />
       </ul>
 
       {/* className='md:hidden rounded-xl p-2 hover:bg-slate-200 dark:hover:bg-slate-800' */}
@@ -96,8 +97,6 @@ function Navbar({ watchListCount }) {
 }
 
 export default Navbar;
-
-
 
 // [{
 //   img:'ldkd',

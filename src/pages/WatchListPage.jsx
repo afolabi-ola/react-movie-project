@@ -1,8 +1,11 @@
 import { Link } from 'react-router';
 import MovieCard from '../components/layout/MovieCard';
 import { getImageUrl } from '../constants';
+import useWatchList from '../hooks/useWatchList';
 
-function WatchListPage({ watchlist, addToWatchList, isMovieInWatchList }) {
+function WatchListPage() {
+  const { watchListData, isMovieInWatchList, addToWatchList } = useWatchList();
+
   return (
     <section className='mx-auto max-w-7xl space-y-8'>
       <div>
@@ -11,13 +14,14 @@ function WatchListPage({ watchlist, addToWatchList, isMovieInWatchList }) {
         </p>
         <h1 className='text-4xl font-black'>Watchlist</h1>
         <p className='mt-2 text-slate-500 dark:text-slate-400'>
-          {watchlist.length} {watchlist.length === 1 ? 'title' : 'titles'} saved
+          {watchListData.length}{' '}
+          {watchListData.length === 1 ? 'title' : 'titles'} saved
         </p>
       </div>
 
-      {watchlist.length > 0 ? (
+      {watchListData.length > 0 ? (
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-          {watchlist.map((movie) => {
+          {watchListData.map((movie) => {
             const {
               title,
               name,

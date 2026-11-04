@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ui/ErrorMessage';
 
 const urls = [DISCOVER_API_URL, TRENDING_API_URL];
 
-function Home({ addToWatchList, isMovieInWatchList }) {
+function Home() {
   const [sliderMovies, setSliderMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,11 +59,7 @@ function Home({ addToWatchList, isMovieInWatchList }) {
   return (
     <>
       <Carousel sliderMovies={sliderMovies} />
-      <AllTrendingMovies
-        trendingMovies={trendingMovies}
-        addToWatchList={addToWatchList}
-        isMovieInWatchList={isMovieInWatchList}
-      />
+      <AllTrendingMovies trendingMovies={trendingMovies} />
     </>
   );
 }

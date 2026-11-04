@@ -4,6 +4,7 @@ import Button from '../ui/Button';
 import RatingBadge from '../ui/RatingBadge';
 import Badge from '../ui/Badge';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
+import useWatchList from '../../hooks/useWatchList';
 
 
 function MovieCard({
@@ -12,10 +13,9 @@ function MovieCard({
   rating = 5.8,
   id,
   mediaType = 'movie',
-  addToWatchList,
   movie,
-  isMovieInWatchList,
 }) {
+  const { isMovieInWatchList, addToWatchList } = useWatchList();
   const isAddedToWatchList = isMovieInWatchList(id);
 
   return (

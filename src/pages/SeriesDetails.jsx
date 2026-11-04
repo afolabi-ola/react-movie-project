@@ -17,14 +17,13 @@ import Gallery from '../components/layout/Gallery';
 import Clips from '../components/layout/Clips';
 import RelatedSeries from '../components/layout/RelatedSeries';
 
-function SeriesDetails({ isMovieInWatchList, addToWatchList }) {
+
+function SeriesDetails() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [seriesDetails, setSeriesDetails] = useState(null);
   const navigate = useNavigate();
-
-  const isAdded = isMovieInWatchList(+id);
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -159,8 +158,6 @@ function SeriesDetails({ isMovieInWatchList, addToWatchList }) {
           tagline,
           id: +id,
         }}
-        isAdded={isAdded}
-        addToWatchList={addToWatchList}
       />
 
       <section className='grid gap-8 '>
