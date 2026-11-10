@@ -68,7 +68,7 @@ function Navbar() {
         </button>
         <ThemeToggle />
         <div className='hidden md:block'>
-          <Button>Sign In</Button>
+          <Button onClick={() => navigate('/login')}>Sign In</Button>
         </div>
       </div>
 
