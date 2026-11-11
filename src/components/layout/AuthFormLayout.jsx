@@ -1,4 +1,4 @@
-function AuthFormLayout({ eyebrow, title, footer, children }) {
+function AuthFormLayout({ eyebrow, title, footer, children, message = null }) {
   return (
     <section className='mx-auto w-full max-w-md py-8'>
       <div className='rounded-2xl bg-slate-100 p-6 shadow-xl dark:bg-slate-900 sm:p-8'>
@@ -7,6 +7,11 @@ function AuthFormLayout({ eyebrow, title, footer, children }) {
         </p>
 
         <h1 className='mb-8 text-3xl font-black'>{title}</h1>
+        {message && (
+          <p className='mb-5 rounded-xl bg-emerald-100 p-3 text-sm font-semibold text-emerald-700'>
+            {message}
+          </p>
+        )}
 
         {children}
 
