@@ -11,6 +11,7 @@ const request = async (endpoint, options) => {
       },
     });
 
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -20,14 +21,40 @@ const request = async (endpoint, options) => {
     return data;
   } catch (error) {
     console.error('Error during request:', error);
-    return error;
+    console.log('returning error');
+    return { message: error.message || 'Request failed', success: false };
   }
 };
 
 export const signup = async (userData) => {
-  await request('signup', {
+  return await request('signup', {
     method: 'Post',
     body: JSON.stringify(userData),
+  });
+};
+
+export const login = async (userData) => {
+  return await request('login', {
+    method: 'Post',
+    body: JSON.stringify(userData),
+  });
+};
+
+export const logout = async () => {
+  return await request('logout');
+};
+
+export const forgotPassword = async (email) => {
+  return await request('forgot-password', {
+    method: 'Post',
+    body: JSON.stringify({ email }),
+  });
+};
+
+export const resetPassword = async (newPassword, token) => {
+  return await request('reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ newPassword, token }),
   });
 };
 

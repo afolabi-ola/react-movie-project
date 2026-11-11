@@ -7,8 +7,11 @@ import ThemeToggle from '../ui/ThemeToggle';
 import { FiMenu, FiSearch, FiX } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import useWatchList from '../../hooks/useWatchList';
+import useAuth from '../../hooks/useAuth';
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
 
 function Navbar() {
+  const { isAuthenticated, user, logoutUser } = useAuth();
   const { watchListData } = useWatchList();
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -67,8 +70,34 @@ function Navbar() {
           <FiSearch />
         </button>
         <ThemeToggle />
+
+        {isAuthenticated && (
+          <button
+            type='button'
+            onClick={() => navigate('/profile')}
+            aria-label={`Open ${user.username}'s profile`}
+            title={user.username}
+            className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
+          >
+            {user.username.slice(0, 2).toUpperCase()}
+          </button>
+        )}
+
         <div className='hidden md:block'>
-          <Button onClick={() => navigate('/login')}>Sign In</Button>
+          {isAuthenticated ? (
+            <button
+              className='cursor-pointer'
+              onClick={async () => {
+                await logoutUser();
+                navigate('/login');
+              }}
+              aria-label='Logout'
+            >
+              <FaArrowRightFromBracket />
+            </button>
+          ) : (
+            <Button onClick={() => navigate('/login')}>Sign In</Button>
+          )}
         </div>
       </div>
 
@@ -110,3 +139,27 @@ export default Navbar;
 //   }
 
 // ]
+/*
+<span className='hidden items-center gap-2 sm:inline-flex'>
+  {isAuthenticated ? (
+    <>
+      <button
+        type='button'
+        onClick={() => navigate('/profile')}
+        aria-label={`Open ${user.username}'s profile`}
+        title={user.username}
+        className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
+      >
+        {user.username.slice(0, 2).toUpperCase()}
+      </button>
+      <Button type='button' onClick={logout}>
+        Sign Out
+      </Button>
+    </>
+  ) : (
+    <Button type='button' onClick={() => navigate('/login')}>
+      Sign In
+    </Button>
+  )}
+</span>;
+*/

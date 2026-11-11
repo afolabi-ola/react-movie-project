@@ -1,13 +1,17 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import AuthFormLayout from '../components/layout/AuthFormLayout';
 import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import useAuth from '../hooks/useAuth';
 
 function Login() {
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
 
   const {
     register,
@@ -15,14 +19,22 @@ function Login() {
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const userData = await loginUser(data);
+    console.log(userData);
+    setMessage(userData.message);
+    if (userData.success) {
+      setTimeout(() => {
+        navigate('/watchlist');
+      }, 2000);
+    }
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Welcome Back'}
       title={'Sign in to your account'}
+      message={message}
       footer={
         <>
           <span>Don't have an account?</span>{' '}

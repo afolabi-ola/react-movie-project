@@ -3,22 +3,28 @@ import AuthFormLayout from '../components/layout/AuthFormLayout';
 import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useForm } from 'react-hook-form';
+import { forgotPassword } from '../services/authServices';
+import { useState } from 'react';
 
 function ForgotPassword() {
+  const [message, setMessage] = useState('');
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const res = await forgotPassword(data.email);
+
+    setMessage(res.message);
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Account recovery'}
       title={'Forgot your password?'}
+      message={message}
       footer={
         <>
           <span>Remember your password?</span>{' '}
@@ -52,3 +58,5 @@ function ForgotPassword() {
 }
 
 export default ForgotPassword;
+
+

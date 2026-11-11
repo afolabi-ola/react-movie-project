@@ -1,27 +1,43 @@
-import { Link } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import AuthFormLayout from '../components/layout/AuthFormLayout';
 import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import { resetPassword } from '../services/authServices';
 
 function ResetPassword() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const password = watch('newPassword');
+
+  const onSubmit = async (data) => {
+    const res = await resetPassword(data.newPassword, token);
+    setMessage(res.message);
+
+    if (res.success) {
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    }
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Account recovery'}
+      message={message}
       title={'Set new password'}
       footer={
         <>
@@ -80,6 +96,8 @@ function ResetPassword() {
                   message:
                     'Confirm password must be at least 8 characters long',
                 },
+                validate: (value) =>
+                  value === password || 'Passwords do not match',
               })}
             />
             <button

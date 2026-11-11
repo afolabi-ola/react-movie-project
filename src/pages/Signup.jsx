@@ -1,14 +1,17 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import AuthFormLayout from '../components/layout/AuthFormLayout';
 import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
-import { signup } from '../services/authServices';
+import useAuth from '../hooks/useAuth';
 
 function Signup() {
+  const navigate = useNavigate();
+  const { signupUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
 
   const {
     register,
@@ -18,14 +21,20 @@ function Signup() {
   console.log(errors);
 
   const onSubmit = async (data) => {
-    const user = await signup(data);
-    console.log(user);
+    const user = await signupUser(data);
+    setMessage(user.message);
+    if (user.success) {
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    }
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Join Movie Explorer'}
       title={'Create your account'}
+      message={message}
       footer={
         <>
           <span>Already have an account?</span>{' '}
