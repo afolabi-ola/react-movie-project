@@ -4,10 +4,10 @@ import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useForm } from 'react-hook-form';
 import { forgotPassword } from '../services/authServices';
-import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 function ForgotPassword() {
-  const [message, setMessage] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -15,16 +15,21 @@ function ForgotPassword() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const res = await forgotPassword(data.email);
+    try {
+      const res = await forgotPassword(data.email);
 
-    setMessage(res.message);
+      toast.success(res.message);
+    } catch (error) {
+      console.error('Forgot password failed:', error);
+      toast.error(error.message || 'Forgot password failed');
+    }
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Account recovery'}
       title={'Forgot your password?'}
-      message={message}
+
       footer={
         <>
           <span>Remember your password?</span>{' '}

@@ -6,12 +6,13 @@ import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import useAuth from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 function Signup() {
   const navigate = useNavigate();
   const { signupUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState('');
+
 
   const {
     register,
@@ -21,20 +22,22 @@ function Signup() {
   console.log(errors);
 
   const onSubmit = async (data) => {
-    const user = await signupUser(data);
-    setMessage(user.message);
-    if (user.success) {
-      setTimeout(() => {
+    try {
+      const user = await signupUser(data);
+      toast.success(user.message);
+      if (user.success) {
         navigate('/login');
-      }, 2000);
+      }
+    } catch (error) {
+      toast.error(error.message || 'Signup failed');
     }
-  };
+  }
+
 
   return (
     <AuthFormLayout
       eyebrow={'Join Movie Explorer'}
       title={'Create your account'}
-      message={message}
       footer={
         <>
           <span>Already have an account?</span>{' '}

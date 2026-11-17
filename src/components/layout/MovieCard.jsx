@@ -1,11 +1,12 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import ImageOne from '../../assets/images/img3.jpg';
 import Button from '../ui/Button';
 import RatingBadge from '../ui/RatingBadge';
 import Badge from '../ui/Badge';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import useWatchList from '../../hooks/useWatchList';
-
+import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 function MovieCard({
   image = ImageOne,
@@ -15,8 +16,10 @@ function MovieCard({
   mediaType = 'movie',
   movie,
 }) {
+  const navigate = useNavigate();
   const { isMovieInWatchList, addToWatchList } = useWatchList();
   const isAddedToWatchList = isMovieInWatchList(id);
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className='w-62.5 min-h-125 h-full  overflow-hidden space-y-3 shadow-2xl bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-tr-2xl rounded-b-2xl'>
@@ -32,7 +35,14 @@ function MovieCard({
         <h1 className='font-bold'>{title}</h1>
 
         <button
-          onClick={() => addToWatchList(movie)}
+          onClick={() => {
+            if (!isAuthenticated) {
+              toast('Please log in to add to watchlist');
+              navigate('/login');
+              return;
+            }
+            addToWatchList(movie);
+          }}
           type='button'
           aria-pressed={isAddedToWatchList}
           className='flex items-center gap-2 text-sm font-semibold text-indigo-500 hover:text-indigo-600 dark:text-blue-400 dark:hover:text-blue-300'
