@@ -6,12 +6,12 @@ import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import { resetPassword } from '../services/authServices';
+import toast from 'react-hot-toast';
 
 function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-  const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -24,20 +24,22 @@ function ResetPassword() {
   const password = watch('newPassword');
 
   const onSubmit = async (data) => {
-    const res = await resetPassword(data.newPassword, token);
-    setMessage(res.message);
+    try {
+      const res = await resetPassword(data.newPassword, token);
+      toast.success(res.message);
 
-    if (res.success) {
-      setTimeout(() => {
+      if (res.success) {
         navigate('/login');
-      }, 2000);
+      }
+    } catch (error) {
+      console.error('Reset password failed:', error);
+      toast.error(error.message || 'Reset password failed');
     }
   };
 
   return (
     <AuthFormLayout
       eyebrow={'Account recovery'}
-      message={message}
       title={'Set new password'}
       footer={
         <>

@@ -5,6 +5,7 @@ import { DISCOVER_API_URL, OPTIONS, TRENDING_API_URL } from '../constants';
 import Loader from '../components/ui/Loader';
 import ErrorMessage from '../components/ui/ErrorMessage';
 
+
 const urls = [DISCOVER_API_URL, TRENDING_API_URL];
 
 function Home() {

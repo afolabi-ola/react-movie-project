@@ -1,9 +1,27 @@
-import { useState } from 'react';
-import { login, signup, logout } from '../services/authServices';
+import { useEffect, useState } from 'react';
+import { login, signup, logout, getCurrentMe } from '../services/authServices';
 import AuthContext from './AuthContext';
 
 function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getCurrentMe();
+
+        setUser(data.data.user);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   const loginUser = async (userData) => {
     const currentUser = await login(userData);
@@ -21,9 +39,9 @@ function AuthContextProvider({ children }) {
   };
 
   const logoutUser = async () => {
-    await logout();
+    const res = await logout();
     setUser(null);
-    return { message: 'User logged out successfully' };
+    return res;
   };
 
   return (
@@ -34,6 +52,7 @@ function AuthContextProvider({ children }) {
         signupUser,
         logoutUser,
         isAuthenticated: Boolean(user),
+        isCurrentUserLoading: isLoading,
       }}
     >
       {children}

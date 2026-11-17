@@ -11,6 +11,9 @@ const request = async (endpoint, options) => {
       },
     });
 
+    if (response.status === 204) {
+      return { message: 'Logged out successfully', success: true };
+    }
 
     const data = await response.json();
 
@@ -22,7 +25,8 @@ const request = async (endpoint, options) => {
   } catch (error) {
     console.error('Error during request:', error);
     console.log('returning error');
-    return { message: error.message || 'Request failed', success: false };
+    // return { message: error.message || 'Request failed', success: false };
+    throw error; // Rethrow the error to be handled by the caller
   }
 };
 
@@ -55,6 +59,12 @@ export const resetPassword = async (newPassword, token) => {
   return await request('reset-password', {
     method: 'POST',
     body: JSON.stringify({ newPassword, token }),
+  });
+};
+
+export const getCurrentMe = async () => {
+  return await request('me', {
+    method: 'GET',
   });
 };
 

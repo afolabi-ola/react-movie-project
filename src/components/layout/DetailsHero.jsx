@@ -6,8 +6,13 @@ import { HiTv } from 'react-icons/hi2';
 import RatingBadge from '../ui/RatingBadge';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import useWatchList from '../../hooks/useWatchList';
+import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router';
 
 function DetailsHero({ details = {} }) {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const { addToWatchList, isMovieInWatchList } = useWatchList();
   const {
     backdrop_path,
@@ -53,7 +58,14 @@ function DetailsHero({ details = {} }) {
 
           <button
             className='mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/80 py-3 font-semibold transition hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-blue-400 dark:hover:text-blue-400'
-            onClick={() => addToWatchList(details)}
+            onClick={() => {
+              if (!isAuthenticated) {
+                toast('Please log in to add to watchlist');
+                navigate('/login');
+                return;
+              }
+              addToWatchList(details);
+            }}
           >
             {isAdded ? <FaBookmark /> : <FaRegBookmark />}
             {isAdded ? 'Remove from watchlist' : 'Add to watchlist'}

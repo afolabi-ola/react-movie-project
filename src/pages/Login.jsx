@@ -6,12 +6,13 @@ import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import useAuth from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 function Login() {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState('');
+  // const [message, setMessage] = useState('');
 
   const {
     register,
@@ -20,13 +21,16 @@ function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const userData = await loginUser(data);
-    console.log(userData);
-    setMessage(userData.message);
-    if (userData.success) {
-      setTimeout(() => {
+    try {
+      const userData = await loginUser(data);
+      console.log(userData);
+      toast.success(userData.message);
+      if (userData.success) {
         navigate('/watchlist');
-      }, 2000);
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      toast.error(error.message || 'Login failed');
     }
   };
 
@@ -34,7 +38,6 @@ function Login() {
     <AuthFormLayout
       eyebrow={'Welcome Back'}
       title={'Sign in to your account'}
-      message={message}
       footer={
         <>
           <span>Don't have an account?</span>{' '}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Button from '../ui/Button';
 import CustomLink from '../ui/CustomLink';
 import Logo from '../ui/Logo';
@@ -9,14 +9,17 @@ import { useNavigate } from 'react-router';
 import useWatchList from '../../hooks/useWatchList';
 import useAuth from '../../hooks/useAuth';
 import { FaArrowRightFromBracket } from 'react-icons/fa6';
+import toast from 'react-hot-toast';
 
 function Navbar() {
-  const { isAuthenticated, user, logoutUser } = useAuth();
+  const { isAuthenticated, user, logoutUser, isCurrentUserLoading } = useAuth();
   const { watchListData } = useWatchList();
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toastId = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseSearch = () => {
     setIsSearchOpen(false);
@@ -31,6 +34,22 @@ function Navbar() {
 
   const handleMenuToggle = () => {
     setIsMenuOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      toastId.current = toast.loading('Logging out...');
+      const res = await logoutUser();
+      navigate('/login');
+      toast.success(res.message || 'Logged out successfully');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast.error(error.message || 'Logout failed');
+    } finally {
+      toast.dismiss(toastId.current); // Dismiss the loading toast after logout is complete
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,6 +67,49 @@ function Navbar() {
           text={`Watchlist(${watchListData.length})`}
           loc='/watchlist'
         />
+        <li className='mt-2 border-t border-slate-300 pt-2 dark:border-slate-700 md:hidden'>
+          {isAuthenticated ? (
+            <div className='flex items-center justify-between gap-3'>
+              <button
+                type='button'
+                onClick={() => {
+                  navigate('/profile');
+                  setIsMenuOpen(false);
+                }}
+                aria-label={`Open ${user.username}'s profile`}
+                title={user.username}
+                className='flex items-center gap-2 rounded-xl p-2 text-left hover:bg-slate-200 dark:hover:bg-slate-800'
+              >
+                <span className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white'>
+                  {user.username.slice(0, 2).toUpperCase()}
+                </span>
+                <span>{user.username}</span>
+              </button>
+
+              <button
+                type='button'
+                className='flex items-center gap-2 rounded-xl p-2 hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-slate-800'
+                onClick={handleLogout}
+                aria-label='Logout'
+                disabled={isLoading}
+              >
+                <FaArrowRightFromBracket />
+                <span>Logout</span>
+              </button>
+            </div>
+          ) : (
+            <Button
+              type='button'
+              className='w-full justify-center'
+              onClick={() => {
+                navigate('/login');
+                setIsMenuOpen(false);
+              }}
+            >
+              Sign In
+            </Button>
+          )}
+        </li>
       </ul>
 
       {/* className='md:hidden rounded-xl p-2 hover:bg-slate-200 dark:hover:bg-slate-800' */}
@@ -71,34 +133,53 @@ function Navbar() {
         </button>
         <ThemeToggle />
 
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
           <button
             type='button'
             onClick={() => navigate('/profile')}
             aria-label={`Open ${user.username}'s profile`}
             title={user.username}
-            className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
+            className='hidden h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600 md:flex'
           >
             {user.username.slice(0, 2).toUpperCase()}
           </button>
-        )}
+        )} */}
 
-        <div className='hidden md:block'>
-          {isAuthenticated ? (
-            <button
-              className='cursor-pointer'
-              onClick={async () => {
-                await logoutUser();
-                navigate('/login');
-              }}
-              aria-label='Logout'
-            >
-              <FaArrowRightFromBracket />
-            </button>
-          ) : (
-            <Button onClick={() => navigate('/login')}>Sign In</Button>
-          )}
-        </div>
+        {isCurrentUserLoading ? (
+          <li>
+            <div className='flex items-center justify-center gap-3'>
+              <div className='h-10 w-10 animate-pulse rounded-full bg-slate-300 dark:bg-slate-700'></div>
+              <div className='h-4 w-4 animate-pulse rounded bg-slate-300 dark:bg-slate-700'></div>
+            </div>
+          </li>
+        ) : (
+          <div className='hidden md:flex items-center gap-4'>
+            {isAuthenticated ? (
+              <>
+                <button
+                  type='button'
+                  onClick={() => navigate('/profile')}
+                  aria-label={`Open ${user.username}'s profile`}
+                  title={user.username}
+                  className='hidden h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600 md:flex'
+                >
+                  {user.username.slice(0, 2).toUpperCase()}
+                </button>
+
+                <button
+                  className='cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                  onClick={handleLogout}
+                  aria-label='Logout'
+                  disabled={isLoading}
+                >
+                  <FaArrowRightFromBracket />
+                </button>
+              </>
+            ) : (
+              <Button onClick={() => navigate('/login')}>Sign In</Button>
+            )}
+          </div>
+        )}
       </div>
 
       <Modal isOpen={isSearchOpen} title='Search' onClose={handleCloseSearch}>
