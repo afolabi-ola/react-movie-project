@@ -67,49 +67,66 @@ function Navbar() {
           text={`Watchlist(${watchListData.length})`}
           loc='/watchlist'
         />
-        <li className='mt-2 border-t border-slate-300 pt-2 dark:border-slate-700 md:hidden'>
-          {isAuthenticated ? (
-            <div className='flex items-center justify-between gap-3'>
-              <button
+        {isCurrentUserLoading ? (
+          <li className='border-t border-slate-300 pt-3 dark:border-slate-700 md:hidden flex justify-between items-center gap-3'>
+            <div
+              className='flex items-center justify-center gap-3'
+              aria-label='Loading user'
+            >
+              <div className='h-10 w-10 animate-pulse rounded-full bg-slate-300 dark:bg-slate-700'></div>
+              <div className='h-4 w-20 animate-pulse rounded bg-slate-300 dark:bg-slate-700'></div>
+            </div>
+
+            <div className='flex items-center justify-center gap-3'>
+              <div className='h-4 w-4 animate-pulse rounded bg-slate-300 dark:bg-slate-700'></div>
+              <div className='h-4 w-20 animate-pulse rounded bg-slate-300 dark:bg-slate-700'></div>
+            </div>
+          </li>
+        ) : (
+          <li className='mt-2 border-t border-slate-300 pt-2 dark:border-slate-700 md:hidden'>
+            {isAuthenticated ? (
+              <div className='flex items-center justify-between gap-3'>
+                <button
+                  type='button'
+                  onClick={() => {
+                    navigate('/profile');
+                    setIsMenuOpen(false);
+                  }}
+                  aria-label={`Open ${user.username}'s profile`}
+                  title={user.username}
+                  className='flex items-center gap-2 rounded-xl p-2 text-left hover:bg-slate-200 dark:hover:bg-slate-800'
+                >
+                  <span className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white'>
+                    {user.username.slice(0, 2).toUpperCase()}
+                  </span>
+                  <span>{user.username}</span>
+                </button>
+
+                <button
+                  type='button'
+                  className='flex items-center gap-2 rounded-xl p-2 hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-slate-800'
+                  onClick={handleLogout}
+                  aria-label='Logout'
+                  disabled={isLoading}
+                >
+                  <FaArrowRightFromBracket />
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <Button
                 type='button'
+                className='w-full justify-center'
                 onClick={() => {
-                  navigate('/profile');
+                  navigate('/login');
                   setIsMenuOpen(false);
                 }}
-                aria-label={`Open ${user.username}'s profile`}
-                title={user.username}
-                className='flex items-center gap-2 rounded-xl p-2 text-left hover:bg-slate-200 dark:hover:bg-slate-800'
               >
-                <span className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white'>
-                  {user.username.slice(0, 2).toUpperCase()}
-                </span>
-                <span>{user.username}</span>
-              </button>
-
-              <button
-                type='button'
-                className='flex items-center gap-2 rounded-xl p-2 hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-slate-800'
-                onClick={handleLogout}
-                aria-label='Logout'
-                disabled={isLoading}
-              >
-                <FaArrowRightFromBracket />
-                <span>Logout</span>
-              </button>
-            </div>
-          ) : (
-            <Button
-              type='button'
-              className='w-full justify-center'
-              onClick={() => {
-                navigate('/login');
-                setIsMenuOpen(false);
-              }}
-            >
-              Sign In
-            </Button>
-          )}
-        </li>
+                Sign In
+              </Button>
+            )}
+          </li>
+        )}
       </ul>
 
       {/* className='md:hidden rounded-xl p-2 hover:bg-slate-200 dark:hover:bg-slate-800' */}
@@ -122,7 +139,6 @@ function Navbar() {
         >
           {isMenuOpen ? <FiX /> : <FiMenu />}
         </button>
-
         <button
           type='button'
           aria-label={isSearchOpen ? 'Close search' : 'Open search'}
@@ -132,28 +148,15 @@ function Navbar() {
           <FiSearch />
         </button>
         <ThemeToggle />
-
-        {/* {isAuthenticated && (
-          <button
-            type='button'
-            onClick={() => navigate('/profile')}
-            aria-label={`Open ${user.username}'s profile`}
-            title={user.username}
-            className='hidden h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600 md:flex'
-          >
-            {user.username.slice(0, 2).toUpperCase()}
-          </button>
-        )} */}
-
         {isCurrentUserLoading ? (
-          <li>
+          <div className='hidden md:block'>
             <div className='flex items-center justify-center gap-3'>
               <div className='h-10 w-10 animate-pulse rounded-full bg-slate-300 dark:bg-slate-700'></div>
               <div className='h-4 w-4 animate-pulse rounded bg-slate-300 dark:bg-slate-700'></div>
             </div>
-          </li>
+          </div>
         ) : (
-          <div className='hidden md:flex items-center gap-4'>
+          <div className='hidden items-center gap-4 md:flex'>
             {isAuthenticated ? (
               <>
                 <button
@@ -161,13 +164,13 @@ function Navbar() {
                   onClick={() => navigate('/profile')}
                   aria-label={`Open ${user.username}'s profile`}
                   title={user.username}
-                  className='hidden h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600 md:flex'
+                  className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
                 >
                   {user.username.slice(0, 2).toUpperCase()}
                 </button>
-
                 <button
-                  className='cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                  type='button'
+                  className='cursor-pointer disabled:cursor-not-allowed disabled:opacity-50'
                   onClick={handleLogout}
                   aria-label='Logout'
                   disabled={isLoading}
@@ -176,7 +179,9 @@ function Navbar() {
                 </button>
               </>
             ) : (
-              <Button onClick={() => navigate('/login')}>Sign In</Button>
+              <Button type='button' onClick={() => navigate('/login')}>
+                Sign In
+              </Button>
             )}
           </div>
         )}
@@ -207,40 +212,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-// [{
-//   img:'ldkd',
-//   title:'ldkdk',
-//   rating:5.8,
-//   id:1,
-//   mediaType:'movie'
-// },
-//   {
-
-//   }
-
-// ]
-/*
-<span className='hidden items-center gap-2 sm:inline-flex'>
-  {isAuthenticated ? (
-    <>
-      <button
-        type='button'
-        onClick={() => navigate('/profile')}
-        aria-label={`Open ${user.username}'s profile`}
-        title={user.username}
-        className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
-      >
-        {user.username.slice(0, 2).toUpperCase()}
-      </button>
-      <Button type='button' onClick={logout}>
-        Sign Out
-      </Button>
-    </>
-  ) : (
-    <Button type='button' onClick={() => navigate('/login')}>
-      Sign In
-    </Button>
-  )}
-</span>;
-*/
