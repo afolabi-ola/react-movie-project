@@ -17,7 +17,8 @@ function MovieCard({
   movie,
 }) {
   const navigate = useNavigate();
-  const { isMovieInWatchList, addToWatchList } = useWatchList();
+  const { isMovieInWatchList, addToWatchList, removeFromWatchList } =
+    useWatchList();
   const isAddedToWatchList = isMovieInWatchList(id);
   const { isAuthenticated } = useAuth();
 
@@ -34,21 +35,42 @@ function MovieCard({
         </div>
         <h1 className='font-bold'>{title}</h1>
 
-        <button
-          onClick={() => {
-            if (!isAuthenticated) {
-              toast('Please log in to add to watchlist');
-              navigate('/login');
-              return;
-            }
-            addToWatchList(movie);
-          }}
-          type='button'
-          aria-pressed={isAddedToWatchList}
-          className='flex items-center gap-2 text-sm font-semibold text-indigo-500 hover:text-indigo-600 dark:text-blue-400 dark:hover:text-blue-300'
-        >
-          {isAddedToWatchList ? <FaBookmark /> : <FaRegBookmark />}
-        </button>
+        {!isAddedToWatchList && (
+          <button
+            onClick={() => {
+              if (!isAuthenticated) {
+                toast('Please log in to add to watchlist');
+                navigate('/login');
+                return;
+              }
+              addToWatchList(movie);
+            }}
+            type='button'
+            aria-pressed={isAddedToWatchList}
+            className='flex items-center gap-2 text-sm font-semibold text-indigo-500 hover:text-indigo-600 dark:text-blue-400 dark:hover:text-blue-300'
+          >
+            <FaRegBookmark />
+          </button>
+        )}
+
+        {isAddedToWatchList && (
+          <button
+            onClick={() => {
+              if (!isAuthenticated) {
+                toast('Please log in to add to watchlist');
+                navigate('/login');
+                return;
+              }
+              removeFromWatchList(id);
+            }}
+            type='button'
+            aria-pressed={isAddedToWatchList}
+            className='flex items-center gap-2 text-sm font-semibold text-indigo-500 hover:text-indigo-600 dark:text-blue-400 dark:hover:text-blue-300'
+          >
+            <FaBookmark />
+          </button>
+        )}
+
         <Link
           to={`/${mediaType === 'movie' ? 'movie' : 'series'}-details/${id}`}
         >
