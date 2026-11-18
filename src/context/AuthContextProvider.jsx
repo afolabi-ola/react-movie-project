@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { login, signup, logout, getCurrentMe } from '../services/authServices';
+import {
+  login,
+  signup,
+  logout,
+  getCurrentMe,
+  getProfile,
+} from '../services/authServices';
 import AuthContext from './AuthContext';
 
 function AuthContextProvider({ children }) {
@@ -44,6 +50,12 @@ function AuthContextProvider({ children }) {
     return res;
   };
 
+  const getUserProfile = async () => {
+    const res = await getProfile();
+
+    return res;
+  };
+
   return (
     <AuthContext
       value={{
@@ -53,6 +65,7 @@ function AuthContextProvider({ children }) {
         logoutUser,
         isAuthenticated: Boolean(user),
         isCurrentUserLoading: isLoading,
+        getUserProfile,
       }}
     >
       {children}

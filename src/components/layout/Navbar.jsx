@@ -67,6 +67,7 @@ function Navbar() {
           text={`Watchlist(${watchListData.length})`}
           loc='/watchlist'
         />
+        {/* mobile view of nav actions */}
         {isCurrentUserLoading ? (
           <li className='border-t border-slate-300 pt-3 dark:border-slate-700 md:hidden flex justify-between items-center gap-3'>
             <div
@@ -94,7 +95,7 @@ function Navbar() {
                   }}
                   aria-label={`Open ${user.username}'s profile`}
                   title={user.username}
-                  className='flex items-center gap-2 rounded-xl p-2 text-left hover:bg-slate-200 dark:hover:bg-slate-800'
+                  className='flex items-center gap-2 rounded-xl p-2 text-left hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer'
                 >
                   <span className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white'>
                     {user.username.slice(0, 2).toUpperCase()}
@@ -130,6 +131,7 @@ function Navbar() {
       </ul>
 
       {/* className='md:hidden rounded-xl p-2 hover:bg-slate-200 dark:hover:bg-slate-800' */}
+      {/* desktop view of nav actions */}
       <div className='flex gap-4 items-center cursor-pointer'>
         <button
           type='button'
@@ -164,7 +166,7 @@ function Navbar() {
                   onClick={() => navigate('/profile')}
                   aria-label={`Open ${user.username}'s profile`}
                   title={user.username}
-                  className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600'
+                  className='flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-black text-white transition hover:bg-indigo-600 cursor-pointer'
                 >
                   {user.username.slice(0, 2).toUpperCase()}
                 </button>
