@@ -12,7 +12,7 @@ function Button({ children, variant, ...props }) {
 
   return (
     <button
-      className={`${buttonClass} px-4 py-2 cursor-pointer font-bold rounded-xl hover:-translate-y-1 transition-all duration-500 ease-in flex items-center gap-2`}
+      className={`${buttonClass} px-4 py-2 cursor-pointer font-bold rounded-xl hover:-translate-y-1 transition-all duration-500 ease-in flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50`}
       {...props}
     >
       {children}

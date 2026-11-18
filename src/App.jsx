@@ -18,6 +18,7 @@ import Signup from './pages/Signup';
 import AuthContextProvider from './context/AuthContextProvider';
 import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './pages/ProtectedRoute';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
               <Route path='/search' element={<Search />} />
               <Route path='/cast/:id' element={<Cast />} />
               <Route element={<ProtectedRoute />}>
+                <Route path='/profile' element={<Profile />} />
                 <Route path='/watchlist' element={<WatchListPage />} />
               </Route>
               <Route path='*' element={<NotFound />} />

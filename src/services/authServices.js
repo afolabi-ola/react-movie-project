@@ -68,6 +68,12 @@ export const getCurrentMe = async () => {
   });
 };
 
+export const getProfile = async () => {
+  return await request('fetch-profile', {
+    method: 'GET',
+  });
+};
+
 // export
 
 /*
