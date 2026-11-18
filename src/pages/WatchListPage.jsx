@@ -24,13 +24,10 @@ function WatchListPage() {
           {watchListData.map((movie) => {
             const {
               title,
-              name,
-              original_title,
-              original_name,
-              vote_average,
-              poster_path,
-              id,
-              media_type,
+              rating: vote_average,
+              posterPath: poster_path,
+              tmdbId: id,
+              mediaType: media_type,
             } = movie;
 
             const imageUrl = getImageUrl(poster_path, 'w500');
@@ -40,7 +37,7 @@ function WatchListPage() {
             return (
               <MovieCard
                 id={id}
-                title={title || original_title || name || original_name}
+                title={title}
                 rating={aprxVoteAvg.toFixed(1)}
                 image={imageUrl}
                 key={id}
