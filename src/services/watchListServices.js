@@ -12,6 +12,11 @@ const request = async (endpoint, options) => {
 
     const data = await response.json();
 
+    if (response.status === 401) {
+      window.dispatchEvent(new Event('app:unauthorised'));
+      throw new Error('Unauthorized access. Please log in again.');
+    }
+
     if (!response.ok) {
       throw new Error(data.message || 'Request failed');
     }

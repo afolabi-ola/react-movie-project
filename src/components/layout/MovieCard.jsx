@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import ImageOne from '../../assets/images/img3.jpg';
 import Button from '../ui/Button';
 import RatingBadge from '../ui/RatingBadge';
@@ -16,6 +16,7 @@ function MovieCard({
   mediaType = 'movie',
   movie,
 }) {
+  const location = useLocation();
   const navigate = useNavigate();
   const { isMovieInWatchList, addToWatchList, removeFromWatchList } =
     useWatchList();
@@ -40,7 +41,7 @@ function MovieCard({
             onClick={() => {
               if (!isAuthenticated) {
                 toast('Please log in to add to watchlist');
-                navigate('/login');
+                navigate('/login', { state: { from: location.pathname } });
                 return;
               }
               addToWatchList(movie);
@@ -58,7 +59,7 @@ function MovieCard({
             onClick={() => {
               if (!isAuthenticated) {
                 toast('Please log in to add to watchlist');
-                navigate('/login');
+                navigate('/login', { state: { from: location.pathname } });
                 return;
               }
               removeFromWatchList(id);

@@ -6,18 +6,23 @@ import {
   removeFromWatchListService,
 } from '../services/watchListServices';
 import toast from 'react-hot-toast';
+import useAuth from '../hooks/useAuth';
 
 function WatchListProvider({ children }) {
   const [watchListData, setWatchListData] = useState([]);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
   const toastId = useRef(null);
+  const { isAuthenticated, user } = useAuth(); // Ensure the user is authenticated before fetching the watchlist
+
+  const userId = user?.id || user?._id || user?.email; // Get the user ID from the authenticated user
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+
     const fetchWatchList = async () => {
       try {
         const data = await getAllWatchListService();
 
-        toast.success('Watchlist fetched successfully!');
         setWatchListData(data.data.watchlistDatabase || []);
       } catch (error) {
         console.error('Error fetching watchlist:', error);
@@ -26,10 +31,14 @@ function WatchListProvider({ children }) {
     };
 
     fetchWatchList();
-  }, [refetchTrigger]);
+  }, [refetchTrigger, isAuthenticated, userId]); // Refetch when refetchTrigger changes or when authentication status changes
+
+  const currentWatchListData = isAuthenticated ? watchListData : [];
 
   const isMovieInWatchList = (movieId) => {
-    return watchListData.some(
+    if (!isAuthenticated) return;
+
+    return currentWatchListData.some(
       (movie) => parseInt(movie.tmdbId) === parseInt(movieId),
     );
   };
@@ -100,7 +109,7 @@ function WatchListProvider({ children }) {
   return (
     <WatchListContext.Provider
       value={{
-        watchListData,
+        watchListData: currentWatchListData,
         addToWatchList,
         isMovieInWatchList,
         removeFromWatchList,

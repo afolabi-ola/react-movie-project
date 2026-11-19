@@ -11,11 +11,20 @@ const request = async (endpoint, options) => {
       },
     });
 
+
     if (response.status === 204) {
       return { message: 'Logged out successfully', success: true };
     }
 
     const data = await response.json();
+
+    if (
+      response.status === 401 &&
+      data.message === 'Invalid or expired token'
+    ) {
+      window.dispatchEvent(new Event('app:unauthorised'));
+      throw new Error('Unauthorized access. Please log in again.');
+    }
 
     if (!response.ok) {
       throw new Error(data.message || 'Request failed');

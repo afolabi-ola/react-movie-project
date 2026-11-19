@@ -13,6 +13,16 @@ function AuthContextProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const handleUnauthorized = () => {
+      console.log('Unauthorized event received. Logging out user.');
+      setUser(null);
+    };
+
+    window.addEventListener('app:unauthorised', handleUnauthorized);
+  }, []);
+
+
+  useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
         setIsLoading(true);
