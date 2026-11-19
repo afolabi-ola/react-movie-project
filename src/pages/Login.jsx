@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import AuthFormLayout from '../components/layout/AuthFormLayout';
 import Field from '../components/layout/Field';
 import SubmitButton from '../components/ui/SubmitButton';
@@ -12,6 +12,8 @@ function Login() {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const location = useLocation();
+  console.log(location);
   // const [message, setMessage] = useState('');
 
   const {
@@ -26,7 +28,7 @@ function Login() {
       console.log(userData);
       toast.success(userData.message);
       if (userData.success) {
-        navigate('/watchlist');
+        navigate(location.state?.from || '/watchlist', { replace: true });
       }
     } catch (error) {
       console.error('Login failed:', error);

@@ -8,12 +8,14 @@ import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import useWatchList from '../../hooks/useWatchList';
 import useAuth from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 function DetailsHero({ details = {} }) {
+  const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { addToWatchList, isMovieInWatchList } = useWatchList();
+
   const {
     backdrop_path,
     poster_path,
@@ -61,7 +63,7 @@ function DetailsHero({ details = {} }) {
             onClick={() => {
               if (!isAuthenticated) {
                 toast('Please log in to add to watchlist');
-                navigate('/login');
+                navigate('/login', { state: { from: location.pathname } });
                 return;
               }
               addToWatchList(details);
